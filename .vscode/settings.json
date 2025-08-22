@@ -22,6 +22,8 @@
         "memory": "c",
         "new": "c",
         "ostream": "c",
-        "utility": "c"
+        "utility": "c",
+        "util.h": "c",
+        "logger.h": "c"
     }
 }
