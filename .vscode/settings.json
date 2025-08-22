@@ -13,6 +13,15 @@
         "string_view": "cpp",
         "unordered_map": "cpp",
         "vector": "cpp",
-        "__locale": "c"
+        "__locale": "c",
+        "string.h": "c",
+        "exception": "c",
+        "functional": "c",
+        "istream": "c",
+        "locale": "c",
+        "memory": "c",
+        "new": "c",
+        "ostream": "c",
+        "utility": "c"
     }
 }
