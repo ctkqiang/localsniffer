@@ -1,0 +1,36 @@
+name: 构建与发布 Localsniffer
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: 安装依赖
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc make libpcap-dev
+
+      - name: 编译 localsniffer
+        run: make
+
+      - name: 运行单元测试
+        run: |
+          gcc -Wall -Iinclude est.c -o est
+          ./est
+
+      - name: 打包二进制
+        run: |
+          PKG_NAME="$(basename $GITHUB_REPOSITORY)-${GITHUB_REF_NAME}-linux.tar.gz"
+          tar -czvf "$PKG_NAME" sniff
+          echo "PKG_NAME=$PKG_NAME" >> $GITHUB_ENV
+
+      - name: 上传构建产物
+        uses: ac
