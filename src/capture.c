@@ -7,10 +7,10 @@
 #define SNAP_LEN 0x5EE
 
 static void packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char *packet) {
-    parser_handle_packet(packet, header->caplen);
+    parse_packet(packet, header->caplen);
 }
 
-void capture_start(const char *dev) {
+void start_capture(const char *dev) {
     char errbuf[PCAP_ERRBUF_SIZE];
 
     pcap_t *handle = pcap_open_live(dev, SNAP_LEN, 1, 1000, errbuf);
