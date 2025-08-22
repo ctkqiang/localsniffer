@@ -23,7 +23,7 @@ jobs:
 
       - name: 运行单元测试
         run: |
-          gcc -Wall -Iinclude est.c -o est
+          gcc -Wall -Iinclude localsniffer_test.c -o est
           ./est
 
       - name: 打包二进制
@@ -33,4 +33,7 @@ jobs:
           echo "PKG_NAME=$PKG_NAME" >> $GITHUB_ENV
 
       - name: 上传构建产物
-        uses: ac
+        uses: actions/upload-artifact@v4
+        with:
+          name: sniff
+          path: ${{ env.PKG_NAME }}
