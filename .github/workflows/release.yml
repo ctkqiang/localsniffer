@@ -23,7 +23,7 @@ jobs:
 
       - name: 运行单元测试
         run: |
-          gcc -Wall -Iinclude localsniffer_test.c -o est
+          gcc -Wall -Iinclude ./test/localsniffer_test.c -o est
           ./est
 
       - name: 打包二进制
