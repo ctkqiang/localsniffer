@@ -1,0 +1,58 @@
+@startuml
+title 本地抓包程序 (localsniffer)
+
+actor 用户 as User
+participant Main as "localsniffer.c"
+participant Logger as "logger.c"
+participant Capture as "capture.c"
+participant Parser as "parser.c"
+database LogFile as "日志文件"
+
+== 启动程序 ==
+User -> Main : 执行 ./sniff [设备名]
+Main -> Main : 解析命令行参数\n选择抓包接口\n(默认 en0/macOS, eth0/Linux)
+Main -> Main : 检查 DEBUG_LOG
+alt DEBUG_LOG 为 true
+    Main -> Main : mkdir ./logs (如果不存在)
+    Main -> Logger : logger_init(带时间戳日志文件)
+    Logger -> LogFile : 打开日志文件
+    Main -> User : 打印 "日志已启用: 文件名"
+else DEBUG_LOG 为 false
+    Main -> Main : mkdir ./logs (如果不存在)
+    Main -> Logger : logger_init(默认日志文件)
+    Logger -> LogFile : 打开日志文件
+end
+
+== 开始抓包 ==
+Main -> Capture : start_capture(设备)
+Capture -> Capture : 初始化 pcap 捕获
+Capture -> Main : 返回成功/失败
+alt 失败
+    Main -> User : 打印 "抓包失败"
+    Main -> Logger : logger_close()
+    Main --> User : 退出程序
+else 成功
+    Capture -> Parser : 每接收到一个数据包 packet
+    Parser -> Parser : 解析 IP 层、TCP 层
+    Parser -> Parser : 判断 payload 长度
+    alt HTTP 端口(80)
+        Parser -> Parser : 提取 Host、请求方法、路径
+        Parser -> Logger : logger_log(构造 RequestEvent)
+        Logger -> LogFile : 写入日志 "时间 IP 请求 URL"
+        Logger -> User : 终端打印 "时间 IP 请求 URL" (绿色)
+    else HTTPS 端口(443)
+        Parser -> Logger : logger_log(构造 RequestEvent)
+        Logger -> LogFile : 写入日志 "时间 IP 请求 https://未知域名"
+        Logger -> User : 终端打印 "时间 IP 请求 https://未知域名" (蓝色)
+    else 其他端口
+        Parser -> Main : 忽略数据包
+    end
+end
+
+== 程序退出 ==
+User -> Main : Ctrl+C / 结束
+Main -> Logger : logger_close()
+Logger -> LogFile : 关闭日志文件
+Main --> User : 程序退出
+
+@enduml

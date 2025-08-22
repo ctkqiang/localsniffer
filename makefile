@@ -8,5 +8,8 @@ OBJ=$(SRC:.c=.o)
 sniff: $(OBJ)
 	$(CC) -o $@ $(OBJ) $(LDFLAGS)
 
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	rm -f src/*.o *.o sniff
+	rm -f src/*.o localsniffer.o sniff

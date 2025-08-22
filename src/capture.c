@@ -16,7 +16,7 @@ void start_capture(const char *dev) {
     pcap_t *handle = pcap_open_live(dev, SNAP_LEN, 1, 1000, errbuf);
 
     if (!handle) {
-        fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuf);
+       fprintf(stderr, "无法打开设备 %s: %s\n", dev, errbuf);
         return;
     }
 
