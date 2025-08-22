@@ -42,6 +42,13 @@ void parse_packet(const unsigned char *packet, int len) {
              
                 logger_log(&ev);
             }
+
+            if (ntohs(tcp -> th_dport) == 0x1BB || ntohs(tcp -> th_sport) == 0x1BB) {
+                strcpy(ev.protocol, "HTTPS");
+
+                strncpy(ev.host, "unknown.domain", sizeof(ev.host));
+                logger_log(&ev);
+            }
         }
     }
 }
