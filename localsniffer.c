@@ -14,6 +14,8 @@
 #ifndef DEFAULT_IFACE
 #   ifdef __APPLE__
 #       define DEFAULT_IFACE "en0"
+#   elif defined(__windows__)
+#       define DEFAULT_IFACE "wifi"
 #   else
 #       define DEFAULT_IFACE "eth0"
 #   endif
