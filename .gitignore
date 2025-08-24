@@ -30,3 +30,4 @@ sniff
 *.la
 *.la.*
 *.lo
+*.log

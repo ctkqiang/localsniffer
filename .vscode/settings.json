@@ -46,6 +46,7 @@
         "tuple": "c",
         "typeinfo": "c",
         "variant": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "stdlib.h": "c"
     }
 }
